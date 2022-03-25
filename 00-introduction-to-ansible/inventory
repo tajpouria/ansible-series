@@ -1,0 +1,6 @@
+[example]
+xx.xxx.xxx.xx
+
+[example:vars]
+ansible_ssh_user=terraform
+ansible_ssh_private_key_file=.ssh/google_compute_engine
