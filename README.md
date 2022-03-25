@@ -1,4 +1,4 @@
-# Ansible Series
+# [Ansible of DevOps](https://www.ansiblefordevops.com/)
 
 [Introduction to Ansible](00-introduction-to-ansible)
 
