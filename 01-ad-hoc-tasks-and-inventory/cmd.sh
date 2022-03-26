@@ -31,3 +31,6 @@ ansible multi -b -B 3600 -a 'yum -y update'
 
 ansible multi -b -m cron -a 'name=daily-cron-all-servers hour=4 job="/path/to/daily-script.sh"'
 ansible multi -b -m cron -a "name='daily-cron-all-servers' state=absent"
+
+ansible app -b -m yum -a 'name=git state=present'
+ansible app -b -m git -a 'repo=https://github.com/githubtraining/hellogitworld.git dest=/opt/myapp update=yes'
