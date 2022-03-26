@@ -22,3 +22,12 @@ ansible multi -m stat -a 'path=/etc/environment'
 ansible multi -m copy -a 'src=/etc/hosts dest=/tmp/hosts'
 
 ansible multi -m fetch -a 'src=/etc/hosts dest=/tmp/hosts'
+
+ansible multi -m file -a "dest=/tmp/test mode=644 state=directory"
+ansible multi -m file -a "src=/src/symlink dest=/dest/symlink owner=root group=root state=link"
+ansible multi -m file -a "dest=/tmp/test state=absent"
+
+ansible multi -b -B 3600 -a 'yum -y update'
+
+ansible multi -b -m cron -a 'name=daily-cron-all-servers hour=4 job="/path/to/daily-script.sh"'
+ansible multi -b -m cron -a "name='daily-cron-all-servers' state=absent"
