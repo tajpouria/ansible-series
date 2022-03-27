@@ -19,3 +19,6 @@
 - Use the `--limit` flag to run an ad-hoc command on one server.
 
 [Introduction to Playbooks](02-introduction-to-playbooks)
+
+- Create a playbook that installs and run Apache
+- Use the ansible `with_items` loop to copy the Apache configuration files.
