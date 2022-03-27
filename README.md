@@ -17,3 +17,5 @@
 - Use `--ask-become-password` or`K` flag to make ansible ask for root password before executing the ad-hoc command.
 - Use the `ansible-doc` command to get the service module documentation.
 - Use the `--limit` flag to run an ad-hoc command on one server.
+
+[Introduction to Playbooks](02-introduction-to-playbooks)

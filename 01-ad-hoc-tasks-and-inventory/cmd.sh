@@ -28,6 +28,8 @@ ansible multi -m file -a "src=/src/symlink dest=/dest/symlink owner=root group=r
 ansible multi -m file -a "dest=/tmp/test state=absent"
 
 ansible multi -b -B 3600 -a 'yum -y update'
+ansible db -b -m async_status -a 'jid=369123874627.19906' # jid=.ansible_job_id
+ansible multi -b -m shell -a 'tail /var/log/messages | grep ansible-command | wc -l'
 
 ansible multi -b -m cron -a 'name=daily-cron-all-servers hour=4 job="/path/to/daily-script.sh"'
 ansible multi -b -m cron -a "name='daily-cron-all-servers' state=absent"
