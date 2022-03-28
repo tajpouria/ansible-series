@@ -22,3 +22,12 @@
 
 - Create a playbook that installs and run Apache
 - Use the ansible `with_items` loop to copy the Apache configuration files.
+
+[Your first real world playbook](03-your-first-real-world-playbook)
+
+- Write a playbook that installs and configures Solr
+  - Use `pre-tasks` to update the yum cache.
+  - Write a `restart solr` handler that uses `service` module to restart Solr when needed.
+  - Use the `get_url` module to download Solr and check the tarball checksum.
+  - Use the `unarchive` module to expand the Solr tarball.
+- Check the syntax using the `ansible-playbook main.yaml --syntax-check` command.

@@ -1,0 +1,57 @@
+---
+- hosts: solr
+  become: true
+
+  vars_files:
+    - vars.yaml
+
+  pre_tasks:
+    - name: Update yum cache is needed.
+      yum:
+        update_cache: true
+
+  handlers:
+    - name: restart solr
+      service:
+        name: solr
+        state: restarted
+
+  tasks:
+    - name: Install Java.
+      yum:
+        name: java-17-openjdk
+        state: present
+
+    - name: Download Solr.
+      get_url:
+        url: "https://www.apache.org/dyn/closer.lua/lucene/solr/{{ solr_version }}/solr-{{ solr_version }}.tgz?action=download"
+        dest: "{{ download_dir }}/solr-{{ solr_version }}.tgz"
+        checksum: "{{ solr_checksum }}"
+
+    - name: Expand Solr.
+      unarchive:
+        remote_src: true # The default behavior is to copy file from host and unarchive on the remote.
+        src: "{{ download_dir }}/solr-{{ solr_version }}.tgz"
+        dest: "{{ download_dir }}"
+        creates: "{{ download_dir }}/solr-{{ solr_version }}/README.md" # If this file exists don't try to expand.(Idempotent)
+
+    # Note that the unarchive module can both download and unarchive compressed artifact.
+    # However in this particular case, because Solr installer try to find the actual tarball we need a way to preserve that.
+    # That's the reason that download and expand Solr steps have been segregated.
+
+    - name: Run Solr installation script.
+      command: >
+        {{ download_dir }}/solr-{{ solr_version }}/bin/install_solr.sh
+        {{ download_dir }}/solr-{{ solr_version }}.tgz
+        -i /opt
+        -d /var/solr
+        -u solr
+        -s solr
+        -p 8983
+        creates={{ solr_dir }}/bin/solr
+
+    - name: Ensure Solr is started and enabled at boot.
+      service:
+        name: solr
+        state: started
+        enabled: true
