@@ -31,3 +31,9 @@
   - Use the `get_url` module to download Solr and check the tarball checksum.
   - Use the `unarchive` module to expand the Solr tarball.
 - Check the syntax using the `ansible-playbook main.yaml --syntax-check` command.
+
+[Playbook Handlers Environment Vars Variables](04-playbook-handlers-environment-vars-variables)
+
+- Write a playbook that install Apache on a CentOS sever, copy over the configuration files and restarts the server on configuration files changes user `handlers`.
+
+15.03
