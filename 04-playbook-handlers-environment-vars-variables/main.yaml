@@ -3,7 +3,7 @@
   become: true
 
   handlers:
-    - name: restart apache
+    - name: restart_apache
       service:
         name: httpd
         state: restarted
@@ -18,7 +18,10 @@
       copy:
         src: files/test.conf
         dest: /etc/httpd/conf.d/test.conf
-      notify: restart apache
+      notify: restart_apache
+
+    - name: Flush handlers.
+      meta: flush_handlers
 
     - name: Ensure Apache is running and starts at boot.
       service:

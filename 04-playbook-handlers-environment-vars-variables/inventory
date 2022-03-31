@@ -1,8 +1,7 @@
 [centos]
-104.199.91.216
+# FIGURE OUT HOW TO HIDE IP ADDRS
 
 [debian]
-104.155.59.141
 
 [multi:children]
 centos
