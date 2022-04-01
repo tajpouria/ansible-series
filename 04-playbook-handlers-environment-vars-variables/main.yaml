@@ -23,6 +23,20 @@
     - name: Flush handlers.
       meta: flush_handlers
 
+    - name: Add an environment variable to the remote machine's shell.
+      lineinfile:
+        dest: "~/.bash_profile"
+        regexp: "^ENV_VAR="
+        line: "ENV_VAR=value"
+      become: false
+
+    - name: Register the environment variable.
+      shell: 'source ~/.bash_profile && echo "$ENV_VAR"'
+      register: foo
+      become: false
+
+    - debug: msg="The environment variable value is {{ foo.stdout }}"
+
     - name: Ensure Apache is running and starts at boot.
       service:
         name: httpd

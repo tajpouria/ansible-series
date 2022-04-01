@@ -34,6 +34,6 @@
 
 [Playbook Handlers Environment Vars Variables](04-playbook-handlers-environment-vars-variables)
 
-- Write a playbook that install Apache on a CentOS sever, copy over the configuration files and restarts the server on configuration files changes user `handlers`.
-- Uses the Ansible's `meta` module with `flush_handlers` to restart the Apache server right after configuration being copied over.
-
+- Write a playbook that install Apache on a CentOS server, copy over the configuration files and restarts the server on configuration files changes user `handlers`.
+- Use the Ansible's `meta` module with `flush_handlers` to restart the Apache server right after configuration being copied over.
+- Use the `line_in_file` module to add an environment variable to the remote machine, register the environment variable as a variable named foo in the playbook using the shell module, and access its value using the print module.
