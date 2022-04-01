@@ -6,7 +6,7 @@
     - vars.yaml
 
   pre_tasks:
-    - name: Update yum cache is needed.
+    - name: Update yum cache if it's needed.
       yum:
         update_cache: true
 

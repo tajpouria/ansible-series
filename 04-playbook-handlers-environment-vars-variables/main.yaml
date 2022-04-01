@@ -1,44 +1,63 @@
 ---
-- hosts: centos
+- hosts: multi
   become: true
 
   handlers:
     - name: restart_apache
       service:
-        name: httpd
+        name: "{{ apache_service }}"
         state: restarted
 
+  pre_tasks:
+    - name: Load variable files.
+      include_vars: "{{ item }}"
+      with_first_found:
+        - "vars/apache.{{ ansible_distribution }}.yaml"
+        - "vars/apache.default.yaml"
+
+    - name: Update apt cache if it's needed.
+      apt:
+        update_cache: true
+      when: ansible_distribution == "Debian"
+
   tasks:
+    - name: Ensure Apache is installed.
+      apt:
+        name: apache2
+        state: present
+      when: ansible_distribution == "Debian"
+
     - name: Ensure Apache is installed.
       yum:
         name: httpd
         state: present
+      when: ansible_distribution == "CentOS"
 
     - name: Copy configuration file.
       copy:
         src: files/test.conf
-        dest: /etc/httpd/conf.d/test.conf
+        dest: "{{ apache_config_dir }}"
       notify: restart_apache
 
     - name: Flush handlers.
       meta: flush_handlers
 
-    - name: Add an environment variable to the remote machine's shell.
-      lineinfile:
-        dest: "~/.bash_profile"
-        regexp: "^ENV_VAR="
-        line: "ENV_VAR=value"
-      become: false
+    # - name: Add an environment variable to the remote machine's shell.
+    #   lineinfile:
+    #     dest: "~/.bash_profile"
+    #     regexp: "^ENV_VAR="
+    #     line: "ENV_VAR=value"
+    #   become: false
 
-    - name: Register the environment variable.
-      shell: 'source ~/.bash_profile && echo "$ENV_VAR"'
-      register: foo
-      become: false
+    # - name: Register the environment variable.
+    #   shell: 'source ~/.bash_profile && echo "$ENV_VAR"'
+    #   register: foo
+    #   become: false
 
-    - debug: msg="The environment variable value is {{ foo.stdout }}"
+    # - debug: msg="The environment variable value is {{ foo.stdout }}"
 
     - name: Ensure Apache is running and starts at boot.
       service:
-        name: httpd
+        name: "{{ apache_service }}"
         state: started
         enabled: true
