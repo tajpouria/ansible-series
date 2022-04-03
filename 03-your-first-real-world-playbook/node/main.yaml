@@ -15,7 +15,7 @@
       become: true
 
     - name: Install NPM, NodeJS and Forever.
-      include_role: nodejs
+      include_role: name=nodejs
 
     - name: Ensure NodeJS app folder exists.
       file: "path={{ node_apps_location }} state=directory"
