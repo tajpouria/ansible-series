@@ -1,0 +1,14 @@
+---
+- name: Install EPEL repo.
+  yum: name=epel-release state=present
+  become: true
+
+- name: Ensure the firewall is disabled. (Since this a test, local server.)
+  service: name=firewalld state=stopped
+  become: true
+
+- name: Install NPM and NodeJS.
+  yum: name=npm state=present enablerepo=epel
+
+- name: Install Forever.
+  npm: name=forever global=yes state=latest

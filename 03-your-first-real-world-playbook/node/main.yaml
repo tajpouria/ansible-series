@@ -14,27 +14,14 @@
           creates: "/etc/yum.repos.d/remi.repo"
       become: true
 
-    - name: Install EPEL repo.
-      yum: name=epel-release state=present
-      become: true
-
-    - name: Ensure the firewall is disabled. (Since this a test, local server.)
-      service: name=firewalld state=stopped
-      become: true
-
-    - name: Install NPM and NodeJS.
-      yum: name=npm state=present enablerepo=epel
-
-    - name: Install Forever.
-      npm: name=forever global=yes state=latest
+    - name: Install NPM, NodeJS and Forever.
+      include_role: nodejs
 
     - name: Ensure NodeJS app folder exists.
       file: "path={{ node_apps_location }} state=directory"
-      become: true
 
     - name: Copy example NodeJS app to server.
       copy: "src=app dest={{ node_apps_location }}"
-      become: true
 
     - name: Install example app dependencies.
       npm: "path={{ node_apps_location }}/app"
@@ -42,7 +29,6 @@
     - name: Check the list of the running Forever applications.
       command: forever list
       register: forever_list
-      changed_when: false
 
     # - debug: "msg={{ forever_list }}"
 
