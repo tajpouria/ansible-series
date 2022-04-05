@@ -1,0 +1,6 @@
+[ubuntu]
+104.199.55.73
+
+[ubuntu:vars]
+ansible_ssh_user=tf-associate
+ansible_ssh_private_key_file=.ssh/google_compute_engine

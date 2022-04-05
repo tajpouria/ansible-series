@@ -1,0 +1,54 @@
+---
+- hosts: all
+  vars_files:
+    - vars.yaml
+
+  handlers:
+    - name: restart_apache
+      service: name=apache2 stater=restarted
+      become: true
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=3600
+      become: true
+
+  tasks:
+    - name: Get software for apt repository management.
+      apt: "name={{ item }} state=present"
+      become: true
+      with_items:
+        - python-apt
+        - python-pycurl
+
+    - name: Install ondrej repository for later versions of PHP.
+      apt_repository: repo='ppa:ondrej/php' state=present
+      become: true
+
+    - name: Install Apache, MySQL, PHP, and other dependencies.
+      apt: "name={{ item }} state=present"
+      become: true
+      with_items:
+        - git
+        - curl
+        - sendmail
+        - apache2
+        - php5.6
+        - php5.6-common
+        - php5.6-mysql
+        - php5.6-cli
+        - php5.6-curl
+        - php5.6-gd
+        - php5.6-dev
+        - php5.6-mcrypt
+        - php5.6-apcu
+        - php-pear
+        - php5.6-mysql
+        - mysql-server
+
+    - name: Start Apache, MySQL, and PHP.
+      service: "name={{ item }} state=started enabled=true"
+      become: true
+      with_items:
+        - apache2
+        - mysql
