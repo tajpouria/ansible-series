@@ -1,5 +1,5 @@
 [ubuntu]
-104.199.55.73
+34.78.196.46
 
 [ubuntu:vars]
 ansible_ssh_user=tf-associate
