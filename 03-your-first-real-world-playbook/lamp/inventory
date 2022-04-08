@@ -2,5 +2,5 @@
 34.78.196.46
 
 [ubuntu:vars]
-ansible_ssh_user=tf-associate
+ansible_ssh_user=terraform
 ansible_ssh_private_key_file=.ssh/google_compute_engine
