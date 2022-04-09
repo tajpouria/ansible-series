@@ -31,6 +31,7 @@
   - Use the `get_url` module to download Solr and check the tarball checksum.
   - Use the `unarchive` module to expand the Solr tarball.
 - Write a playbook that run a NodeJS application.
+- Write a playbook that serve Drupal using LAMP stack.
 - Check the syntax using the `ansible-playbook main.yaml --syntax-check` command.
 
 [Playbook Handlers Environment Vars Variables](04-playbook-handlers-environment-vars-variables)

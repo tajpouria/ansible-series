@@ -19,6 +19,7 @@
       with_items:
         - python-apt
         - python-pycurl
+        - python3-pip
 
     - name: Install ondrej repository for later versions of PHP.
       apt_repository: repo='ppa:ondrej/php' state=present
@@ -30,17 +31,18 @@
         - curl
         - sendmail
         - apache2
-        - php5.6
-        - php5.6-common
-        - php5.6-mysql
-        - php5.6-cli
-        - php5.6-curl
-        - php5.6-gd
-        - php5.6-dev
-        - php5.6-mcrypt
-        - php5.6-apcu
+        - php7.4
+        - php7.4-common
+        - php7.4-mysql
+        - php7.4-cli
+        - php7.4-curl
+        - php7.4-xml
+        - php7.4-gd
+        - php7.4-dev
+        - php7.4-mcrypt
+        - php7.4-apcu
         - php-pear
-        - php5.6-mysql
+        - php7.4-mysql
         - mysql-server
 
     - name: Start Apache, MySQL, and PHP.
@@ -83,6 +85,23 @@
         state: present
       notify: restart_apache
 
+    - name: Make sure pymysql is present
+      pip:
+        name: pymysql
+        state: present
+
+    - name: Remove MySQL test database.
+      mysql_db:
+        name: test
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create a database fro Drupal.
+      mysql_db:
+        name: "{{ domain }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
     - name: Download Composer installer.
       get_url:
         url: https://getcomposer.org/installer
@@ -104,15 +123,42 @@
       git:
         repo: https://github.com/drush-ops/drush.git
         dest: /opt/drush
+        version: 7.x
 
     - name: Install Drush dependencies with Composer.
       shell: >
-        /usr/local/bin/composer install
+        /usr/local/bin/composer install --no-interaction
         chdir=/opt/drush
         creates=/opt/drush/vendor/autoload.php
 
-    - name: Create drush bin symlink.
+    - name: Create Drush bin symlink.
       file:
         src: /opt/drush/drush
         dest: /usr/local/bin/drush
         state: link
+
+    - name: Checkout the Drupal Core to the Apache docroot.
+      git:
+        repo: http://git.drupal.org/project/drupal.git
+        version: "{{ drupal_core_version }}"
+        dest: "{{ drupal_core_path }}"
+
+    - name: Install Drupal.
+      command: >
+        drush si -y --site-name="D7 Test" --account-name=admin
+        --account-pass=admin --db-url="mysql://root@localhost/drupaltest"
+        chdir={{ drupal_core_path }}
+        creates={{ drupal_core_path }}/sites/default/settings.php
+      notify: restart_apache
+
+    - name: Set permissions properly on Drupal settings.php
+      file:
+        path: "{{ drupal_core_path }}/sites/default/settings.php"
+        mode: 0744
+
+    - name: Set permissions on Drupal files directory.
+      file:
+        path: "{{ drupal_core_path }}/sites/default/files"
+        mode: 0777
+        state: directory
+        recurse: true

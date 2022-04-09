@@ -1,5 +1,5 @@
 [ubuntu]
-34.78.196.46
+35.233.16.87
 
 [ubuntu:vars]
 ansible_ssh_user=terraform
