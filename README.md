@@ -32,6 +32,7 @@
   - Use the `unarchive` module to expand the Solr tarball.
 - Write a playbook that run a NodeJS application.
 - Write a playbook that serve Drupal using LAMP stack.
+- Write a playbook that serve Solr using Tomcat9.
 - Check the syntax using the `ansible-playbook main.yaml --syntax-check` command.
 
 [Playbook Handlers Environment Vars Variables](04-playbook-handlers-environment-vars-variables)
