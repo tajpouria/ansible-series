@@ -41,3 +41,10 @@
 - Use the Ansible's `meta` module with `flush_handlers` to restart the Apache server right after configuration being copied over.
 - Use the `line_in_file` module to add an environment variable to the remote machine, register the environment variable as a variable named foo in the playbook using the shell module, and access its value using the print module.
 - Adjust the playbook to support both CentOS and Debian Apache installation.
+
+[Introduction to AWX](7-introduction-to-awx)
+
+- Install AWX on a local K8s cluster, with ingress enabled.
+- Run the demo job within the templates tab.
+
+https://github.com/geerlingguy/ansible-awx-varnish-php-app
